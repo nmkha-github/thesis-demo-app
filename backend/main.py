@@ -1,6 +1,7 @@
 from utils.video_utils import _frame_from_video
 from utils.zeroshot_classification import ZeroshotClassification
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import cv2
 import tempfile
 import warnings
@@ -8,6 +9,7 @@ import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route("/")
