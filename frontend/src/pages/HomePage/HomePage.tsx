@@ -1,14 +1,15 @@
-import { Box, Button, Collapse, IconButton } from "@mui/material";
+import { Box, Collapse, IconButton } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { MdFileUpload } from "react-icons/md";
 import { FaTrash } from "react-icons/fa";
 import Colors from "../../lib/constants/colors";
 import useAppSnackbar from "../../lib/hook/useAppSnackbar";
-import VideoPlayer from "../../lib/components/VideoPlayer/VideoPlayer";
 import TrackingSection from "./components/TrackingSection/TrackingSection";
+import ReactPlayer from "react-player";
 
 const HomePage = () => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const videoRef = useRef<ReactPlayer>(null);
   const [file, setFile] = useState<File>();
   const [trackingOpen, setTrackingOpen] = useState(false);
 
@@ -59,18 +60,19 @@ const HomePage = () => {
           display: "flex",
         }}
       >
-        <Box style={{ width: 450 }}>
-          {!!file ? (
-            <VideoPlayer
-              url={URL.createObjectURL(file)}
-              width={"100%"}
-              height={300}
-              controls
-            />
-          ) : (
+        <Box style={{ width: 480 }}>
+          <ReactPlayer
+            ref={videoRef}
+            url={!!file ? URL.createObjectURL(file) : ""}
+            width={"100%"}
+            height={340}
+            style={{ display: !!file ? "block" : "none" }}
+            controls
+          />
+          {!file && (
             <Box
               style={{
-                height: 300,
+                height: 340,
                 border: `1.5px dashed ${Colors.primary}`,
                 borderRadius: 16,
                 cursor: "pointer",
@@ -89,7 +91,8 @@ const HomePage = () => {
             style={{
               padding: "8px 16px",
               background: Colors.primary1,
-              marginTop: 16,
+              marginTop: 28,
+              marginBottom: 20,
               borderRadius: 16,
               display: "flex",
               justifyContent: "space-between",
@@ -114,13 +117,9 @@ const HomePage = () => {
             }}
           />
         )}
-        <Collapse
-          in={trackingOpen}
-          timeout={"auto"}
-          unmountOnExit
-          orientation="horizontal"
-        >
-          <TrackingSection file={file} />
+
+        <Collapse in={trackingOpen} timeout={"auto"} orientation="horizontal">
+          <TrackingSection videoRef={videoRef} file={file} />
         </Collapse>
       </Box>
     </Box>

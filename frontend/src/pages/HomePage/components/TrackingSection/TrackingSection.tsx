@@ -1,13 +1,17 @@
 import { Box, BoxProps, Tab, Tabs } from "@mui/material";
 import { useState } from "react";
 import ActionTrackingTab from "../ActionTrackingTab/ActionTrackingTab";
+import { DangerTrackingTab } from "../DangerTrackingTab/DangerTrackingTab";
+import ReactPlayer from "react-player";
 
 interface TrackingSectionProps {
   file?: File;
+  videoRef: React.RefObject<ReactPlayer>;
 }
 
 const TrackingSection = ({
   file,
+  videoRef,
   ...boxProps
 }: TrackingSectionProps & BoxProps) => {
   const [tabIndex, setTabIndex] = useState(0);
@@ -25,9 +29,16 @@ const TrackingSection = ({
         <Tab value={1} label="Danger" />
         <Tab value={2} label="Visualization" />
       </Tabs>
+
       <ActionTrackingTab
         file={file}
         style={{ display: tabIndex === 0 ? "block" : "none" }}
+      />
+
+      <DangerTrackingTab
+        file={file}
+        videoRef={videoRef}
+        style={{ display: tabIndex === 1 ? "block" : "none" }}
       />
     </Box>
   );

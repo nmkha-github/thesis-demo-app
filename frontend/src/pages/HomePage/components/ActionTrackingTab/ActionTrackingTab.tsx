@@ -3,7 +3,6 @@ import useAppSnackbar from "../../../../lib/hook/useAppSnackbar";
 import { useEffect, useState } from "react";
 import VideoApi from "../../../../lib/apis/VideoApi";
 import ActionPredictInterface from "../../../../lib/interfaces/ActionPredictInterface";
-import Colors from "../../../../lib/constants/colors";
 
 interface ActionTrackingTabProps {
   file?: File;
@@ -14,7 +13,10 @@ const ActionTrackingTab = ({
   ...boxProps
 }: ActionTrackingTabProps & BoxProps) => {
   const [loading, setLoading] = useState(false);
-  const [predictAction, setPredictAction] = useState<ActionPredictInterface>();
+  const [predictAction, setPredictAction] = useState<ActionPredictInterface>({
+    predict: "",
+    probabilities: {},
+  });
 
   const { showSnackbarError } = useAppSnackbar();
 
@@ -26,33 +28,43 @@ const ActionTrackingTab = ({
     } catch (error) {
       showSnackbarError(error);
     } finally {
-      setLoading(loading);
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     if (file) {
+      console.log(file.name);
       getPredictAction(file);
     }
   }, [file]);
 
-  if (!predictAction) return null;
-
-  return loading ? (
-    <Box style={{ marginTop: 128, display: "flex", justifyContent: "center" }}>
-      <CircularProgress />
-    </Box>
-  ) : (
+  return (
     <Box {...boxProps}>
-      <Box
-        style={{ fontWeight: 600 }}
-      >{`Action predict: ${predictAction.predict}`}</Box>
-      {Object.keys(predictAction.probabilities).map((key, i) => (
-        <Box style={{ display: "flex", justifyContent: "space-between" }}>
-          <Box>{key}:</Box>
-          <Box>{`${(predictAction.probabilities[key] * 100).toFixed(2)}%`}</Box>
+      {loading ? (
+        <Box
+          style={{ marginTop: 128, display: "flex", justifyContent: "center" }}
+        >
+          <CircularProgress />
         </Box>
-      ))}
+      ) : (
+        <Box>
+          <Box
+            style={{ fontWeight: 600 }}
+          >{`Action predict: ${predictAction.predict}`}</Box>
+          {Object.keys(predictAction.probabilities).map((key, i) => (
+            <Box
+              key={`action-${i}`}
+              style={{ display: "flex", justifyContent: "space-between" }}
+            >
+              <Box>{key}:</Box>
+              <Box>{`${(predictAction.probabilities[key] * 100).toFixed(
+                2
+              )}%`}</Box>
+            </Box>
+          ))}
+        </Box>
+      )}
     </Box>
   );
 };

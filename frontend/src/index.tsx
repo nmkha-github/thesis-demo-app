@@ -5,6 +5,7 @@ import AppSnackbarProvider from "./lib/provider/AppSnackbarProvider";
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./AppRoutes";
 import ConfirmDialogProvider from "./lib/provider/ConfirmDialogProvider";
+import "react-perfect-scrollbar/dist/css/styles.css";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
