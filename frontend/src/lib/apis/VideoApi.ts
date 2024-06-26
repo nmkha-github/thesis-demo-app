@@ -25,7 +25,9 @@ const VideoApi = {
         const formData = new FormData();
         formData.append("file", file);
         formData.append("action", action)
-        const visualizationResponse = await axios.post(process.env.REACT_APP_BACKEND_HOST + "/visualize", formData)
+        const visualizationResponse = await axios.post(process.env.REACT_APP_BACKEND_HOST + "/visualize", formData, {
+            responseType: 'blob' // Ensure the response is treated as a Blob
+        })
 
         return visualizationResponse.data;
     }

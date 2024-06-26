@@ -23,9 +23,7 @@ const VisualizationTab = ({
     try {
       setVisualizing(true);
       const visualizationResponse = await VideoApi.visualization(file, action);
-      const url = URL.createObjectURL(
-        new Blob([visualizationResponse], { type: "video/webm" })
-      );
+      const url = URL.createObjectURL(visualizationResponse);
       setVideoUrl(url);
     } catch (error) {
       showSnackbarError(error);
