@@ -150,7 +150,7 @@ def visualize():
         frame_height, frame_width, _ = visualize_frames[0].shape
 
         out = cv2.VideoWriter(
-            "output.webm",
+            "outputs\output.webm",
             cv2.VideoWriter_fourcc(*"VP90"),
             1,
             (frame_width, frame_height),
@@ -161,21 +161,7 @@ def visualize():
 
         out.release()
 
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as temp_video:
-            video_path = temp_video.name
-            out = cv2.VideoWriter(
-                video_path,
-                cv2.VideoWriter_fourcc(*"VP90"),
-                1,
-                (frame_width, frame_height),
-            )
-
-            for frame in visualize_frames:
-                out.write((frame * 255).astype(np.uint8))
-
-            out.release()
-
-            return send_file(video_path, as_attachment=True)
+        return send_file("outputs\output.webm", as_attachment=True)
 
 
 if __name__ == "__main__":
