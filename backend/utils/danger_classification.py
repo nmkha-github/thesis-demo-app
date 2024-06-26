@@ -93,6 +93,6 @@ class DangerClassification:
                     {"start": start_frame / skip, "end": end_frame / skip}
                 )
             print("--- union %s seconds ---" % (time.time() - start_time))
-
+        torch.cuda.empty_cache()
         # return danger_frame_index_list, [self.actions[x] for x in predict_actions]
         return danger_segment

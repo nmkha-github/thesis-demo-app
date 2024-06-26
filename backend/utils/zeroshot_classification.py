@@ -46,6 +46,7 @@ class ZeroshotClassification:
             video_feature = self.model.get_vid_features(frames_tensor)
             prob = self.model.get_predict_label(video_feature, self.class_name_feature)
             predict_action = torch.argmax(prob)
+            torch.cuda.empty_cache()
             return prob, predict_action
 
 

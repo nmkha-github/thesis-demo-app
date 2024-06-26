@@ -19,6 +19,15 @@ const VideoApi = {
         const actionPredictResponse = await axios.post(process.env.REACT_APP_BACKEND_HOST + "/danger-predict", formData);
 
         return actionPredictResponse.data;
+    },
+
+    visualization: async (file: File, action: string)=>{
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("action", action)
+        const visualizationResponse = await axios.post(process.env.REACT_APP_BACKEND_HOST + "/visualize", formData)
+
+        return visualizationResponse.data;
     }
 }
 

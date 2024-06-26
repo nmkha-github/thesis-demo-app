@@ -3,6 +3,22 @@ import numpy as np
 import torch
 
 
+def generate_frames(frame_list):
+    """
+    This function generates frames from a list for video streaming.
+
+    Args:
+        frame_list: A list of OpenCV image frames.
+
+    Yields:
+        A generator that yields encoded frames for video streaming.
+    """
+    for frame in frame_list:
+        ret, buffer = cv2.imencode(".jpg", frame)  # Encode frame as JPEG
+        frame = buffer.tobytes()
+        yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n")
+
+
 def _frame_from_video(video):
     while video.isOpened():
         success, frame = video.read()

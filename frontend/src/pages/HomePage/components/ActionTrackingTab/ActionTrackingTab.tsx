@@ -3,6 +3,7 @@ import useAppSnackbar from "../../../../lib/hook/useAppSnackbar";
 import { useEffect, useState } from "react";
 import VideoApi from "../../../../lib/apis/VideoApi";
 import ActionPredictInterface from "../../../../lib/interfaces/ActionPredictInterface";
+import { useAction } from "../../provider/ActionProvider";
 
 interface ActionTrackingTabProps {
   file?: File;
@@ -12,36 +13,17 @@ const ActionTrackingTab = ({
   file,
   ...boxProps
 }: ActionTrackingTabProps & BoxProps) => {
-  const [loading, setLoading] = useState(false);
-  const [predictAction, setPredictAction] = useState<ActionPredictInterface>({
-    predict: "",
-    probabilities: {},
-  });
-
-  const { showSnackbarError } = useAppSnackbar();
-
-  const getPredictAction = async (file: File) => {
-    try {
-      setLoading(true);
-      const action = await VideoApi.actionPredict(file);
-      setPredictAction(action);
-    } catch (error) {
-      showSnackbarError(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { action, actionLoading, getAction } = useAction();
 
   useEffect(() => {
     if (file) {
-      console.log(file.name);
-      getPredictAction(file);
+      getAction(file);
     }
   }, [file]);
 
   return (
     <Box {...boxProps}>
-      {loading ? (
+      {actionLoading ? (
         <Box
           style={{ marginTop: 128, display: "flex", justifyContent: "center" }}
         >
@@ -51,16 +33,14 @@ const ActionTrackingTab = ({
         <Box>
           <Box
             style={{ fontWeight: 600 }}
-          >{`Action predict: ${predictAction.predict}`}</Box>
-          {Object.keys(predictAction.probabilities).map((key, i) => (
+          >{`Action predict: ${action.predict}`}</Box>
+          {Object.keys(action.probabilities).map((key, i) => (
             <Box
               key={`action-${i}`}
               style={{ display: "flex", justifyContent: "space-between" }}
             >
               <Box>{key}:</Box>
-              <Box>{`${(predictAction.probabilities[key] * 100).toFixed(
-                2
-              )}%`}</Box>
+              <Box>{`${(action.probabilities[key] * 100).toFixed(2)}%`}</Box>
             </Box>
           ))}
         </Box>
