@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import useAppSnackbar from "../../../../lib/hook/useAppSnackbar";
 import VideoApi from "../../../../lib/apis/VideoApi";
 import { Box, BoxProps, Button, CircularProgress, Slider } from "@mui/material";
+import { styled } from '@mui/material/styles';
 import DangerPredictInterface from "../../../../lib/interfaces/DangerPredictInterface";
 import ReactPlayer from "react-player";
 import PerfectScrollbar from "react-perfect-scrollbar";
@@ -10,6 +11,20 @@ interface DangerTrackingTabProps {
   file?: File;
   videoRef: React.RefObject<ReactPlayer>;
 }
+
+const CustomSlider = styled(Slider)({
+  '& .MuiSlider-thumb': {
+    display: 'none',
+  },
+  '& .MuiSlider-track': {
+    height: '8px',
+    borderRadius: '4px',
+  },
+  '& .MuiSlider-rail': {
+    height: '8px',
+    borderRadius: '4px',
+  },
+});
 
 export const DangerTrackingTab = ({
   file,
@@ -23,6 +38,18 @@ export const DangerTrackingTab = ({
   });
 
   const { showSnackbarError } = useAppSnackbar();
+
+  const getColor = (value: number) => {
+    if (value < 30) {
+      return '#76f480';
+    }
+    else if (value < 70) {
+      return '#ffbe73';
+    }
+    else {
+      return '#eb4f4f';
+    }
+  };
 
   const getPredictDanger = async (file: File, threshold: number) => {
     try {
@@ -52,11 +79,16 @@ export const DangerTrackingTab = ({
         }}
       >
         <Box style={{ fontWeight: 600 }}>Threshold: </Box>
-        <Slider
+        <CustomSlider
           value={threshold}
           onChange={(event, newValue) => setThreshold(newValue as number)}
           style={{ margin: "0px 8px" }}
+          sx={{
+            color: getColor(threshold),
+          }}
         />
+
+
         <Box>{threshold}</Box>
       </Box>
       <Box style={{ height: 292 }}>
