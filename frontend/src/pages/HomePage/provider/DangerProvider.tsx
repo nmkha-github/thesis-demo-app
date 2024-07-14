@@ -14,7 +14,7 @@ interface DangerContextProps {
 const DangerContext = createContext<DangerContextProps>({
   //init value
   dangerSegment: {
-    danger_segment:[]
+    danger_segment: [],
   },
   threshold: 85,
   setThreshold: () => {},
@@ -29,25 +29,31 @@ interface DangerContextProviderProps {
 const DangerProvider = ({ children }: DangerContextProviderProps) => {
   //state
   const [dangerSegment, setDangerSegment] = useState<DangerPredictInterface>({
-        danger_segment:[]
+    danger_segment: [],
   });
-  const [threshold, setThreshold] =useState(85)
+  const [threshold, setThreshold] = useState(85);
   const [dangerSegmentLoading, setDangerSegmentLoading] = useState(false);
 
   //
   const { showSnackbarError } = useAppSnackbar();
   //function
-  const getDangerSegment = useCallback(async (file: File, threshold: number) => {
-    try {
-         setDangerSegmentLoading(true);
-      const dangerSegment = await VideoApi.dangerPredict(file, threshold);
-      setDangerSegment(dangerSegment);
-    } catch (error) {
-      showSnackbarError(error);
-    } finally {
+  const getDangerSegment = useCallback(
+    async (file: File, threshold: number) => {
+      try {
+        setDangerSegmentLoading(true);
+        const dangerSegment = await VideoApi.dangerPredict(
+          file,
+          threshold / 100
+        );
+        setDangerSegment(dangerSegment);
+      } catch (error) {
+        showSnackbarError(error);
+      } finally {
         setDangerSegmentLoading(false);
-    }
-  }, []);
+      }
+    },
+    []
+  );
   //useEffect
 
   return (
