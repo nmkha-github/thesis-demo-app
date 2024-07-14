@@ -1,7 +1,11 @@
 import { Box, Collapse, IconButton } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import Switch, { switchClasses } from "@mui/joy/Switch";
+import { Theme } from "@mui/joy";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { MdFileUpload } from "react-icons/md";
 import { FaTrash } from "react-icons/fa";
+import { VscServerProcess } from "react-icons/vsc";
+import { MdOndemandVideo } from "react-icons/md";
 import Colors from "../../lib/constants/colors";
 import useAppSnackbar from "../../lib/hook/useAppSnackbar";
 import TrackingSection from "./components/TrackingSection/TrackingSection";
@@ -12,8 +16,22 @@ const HomePage = () => {
   const videoRef = useRef<ReactPlayer>(null);
   const [file, setFile] = useState<File>();
   const [trackingOpen, setTrackingOpen] = useState(false);
-
+  const [checked, setChecked] = useState(false);
   const { showSnackbarError } = useAppSnackbar();
+
+  const RawVideo = useMemo(
+    () => (
+      <ReactPlayer
+        ref={videoRef}
+        url={!!file ? URL.createObjectURL(file) : ""}
+        width={"100%"}
+        height={340}
+        style={{ display: !!file ? "block" : "none" }}
+        controls
+      />
+    ),
+    [file]
+  );
 
   const uploadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -61,14 +79,8 @@ const HomePage = () => {
         }}
       >
         <Box style={{ width: 480 }}>
-          <ReactPlayer
-            ref={videoRef}
-            url={!!file ? URL.createObjectURL(file) : ""}
-            width={"100%"}
-            height={340}
-            style={{ display: !!file ? "block" : "none" }}
-            controls
-          />
+          {RawVideo}
+
           {!file && (
             <Box
               style={{
@@ -86,12 +98,60 @@ const HomePage = () => {
               <p>Upload File</p>
             </Box>
           )}
+          <Box
+            style={{
+              paddingTop: 16,
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Switch
+              disabled={!file}
+              checked={checked}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                setChecked(event.target.checked)
+              }
+              slotProps={{
+                thumb: {
+                  children: checked ? (
+                    <VscServerProcess size={22} />
+                  ) : (
+                    <MdOndemandVideo size={22} />
+                  ),
+                },
+              }}
+              sx={(theme: Theme) => ({
+                "--Switch-thumbShadow": "0 3px 7px 0 rgba(0 0 0 / 0.12)",
+                "--Switch-thumbSize": "28px",
+                "--Switch-trackWidth": "60px",
+                "--Switch-trackHeight": "32px",
+                "--Switch-trackBackground":
+                  theme.vars.palette.background.level3,
+                [`& .${switchClasses.thumb}`]: {
+                  transition: "width 0.2s, left 0.2s",
+                },
+                "&:hover": {
+                  "--Switch-trackBackground":
+                    theme.vars.palette.background.level3,
+                },
+                "&:active": {
+                  "--Switch-thumbWidth": "32px",
+                },
+                [`&.${switchClasses.checked}`]: {
+                  "--Switch-trackBackground": Colors.primary,
+                  "&:hover": {
+                    "--Switch-trackBackground": Colors.primary,
+                  },
+                },
+              })}
+            />
+          </Box>
 
           <Box
             style={{
               padding: "8px 16px",
               background: Colors.primary1,
-              marginTop: 28,
+              marginTop: 20,
               marginBottom: 20,
               borderRadius: 16,
               display: "flex",
