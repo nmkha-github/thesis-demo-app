@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
 import ActionProvider from "./pages/HomePage/provider/ActionProvider";
+import DangerProvider from "./pages/HomePage/provider/DangerProvider";
 
 const AppRoutes = () => {
   return (
@@ -9,7 +10,9 @@ const AppRoutes = () => {
         path="/"
         element={
           <ActionProvider>
-            <HomePage />
+            <DangerProvider>
+              <HomePage />
+            </DangerProvider>
           </ActionProvider>
         }
       />

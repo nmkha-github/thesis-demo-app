@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
-import useAppSnackbar from "../../../../lib/hook/useAppSnackbar";
-import VideoApi from "../../../../lib/apis/VideoApi";
+import { useEffect } from "react";
 import { Box, BoxProps, Button, CircularProgress, Slider } from "@mui/material";
-import DangerPredictInterface from "../../../../lib/interfaces/DangerPredictInterface";
 import ReactPlayer from "react-player";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import { useDanger } from "../../provider/DangerProvider";
 
 interface DangerTrackingTabProps {
   file?: File;
@@ -16,29 +14,17 @@ export const DangerTrackingTab = ({
   videoRef,
   ...boxProps
 }: DangerTrackingTabProps & BoxProps) => {
-  const [threshold, setThreshold] = useState(85);
-  const [loading, setLoading] = useState(false);
-  const [dangerSegment, setDangerSegment] = useState<DangerPredictInterface>({
-    danger_segment: [],
-  });
-
-  const { showSnackbarError } = useAppSnackbar();
-
-  const getPredictDanger = async (file: File, threshold: number) => {
-    try {
-      setLoading(true);
-      const dangerSegment = await VideoApi.dangerPredict(file, threshold / 100);
-      setDangerSegment(dangerSegment);
-    } catch (error) {
-      showSnackbarError(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    dangerSegment,
+    dangerSegmentLoading,
+    threshold,
+    setThreshold,
+    getDangerSegment,
+  } = useDanger();
 
   useEffect(() => {
     if (file) {
-      getPredictDanger(file, threshold);
+      getDangerSegment(file, threshold);
     }
   }, [file]);
 
@@ -60,7 +46,7 @@ export const DangerTrackingTab = ({
         <Box>{threshold}</Box>
       </Box>
       <Box style={{ height: 292 }}>
-        {loading ? (
+        {dangerSegmentLoading ? (
           <Box
             style={{
               paddingTop: 128,
@@ -104,7 +90,7 @@ export const DangerTrackingTab = ({
           variant="outlined"
           onClick={async () => {
             if (file) {
-              await getPredictDanger(file, threshold);
+              await getDangerSegment(file, threshold);
             }
           }}
         >
