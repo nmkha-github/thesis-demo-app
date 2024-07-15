@@ -18,7 +18,7 @@ const TrackingSection = ({
   const [tabIndex, setTabIndex] = useState(0);
 
   return (
-    <Box style={{ width: 600 }} {...boxProps}>
+    <Box style={{ width: 520 }} {...boxProps}>
       <Tabs
         value={tabIndex}
         onChange={(event, newValue) => {
