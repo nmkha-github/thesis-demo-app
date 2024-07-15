@@ -188,6 +188,7 @@ def pose():
 
         # Decode the byte array to an OpenCV video capture object
         video = cv2.VideoCapture(temp_video_path)
+        fps = video.get(cv2.CAP_PROP_FPS)
         if not video.isOpened():
             return jsonify({"error": "Could not open video file"}), 500
 
@@ -197,7 +198,7 @@ def pose():
         out = cv2.VideoWriter(
             "outputs/pose_output.webm",
             cv2.VideoWriter_fourcc(*"VP90"),
-            1,
+            fps,
             (frame_width, frame_height),
         )
 

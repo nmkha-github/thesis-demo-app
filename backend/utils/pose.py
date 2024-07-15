@@ -16,11 +16,8 @@ def extract_pose(video):
         # Resize frame to 224x224 for processing (assuming aspect ratio is maintained)
         resized_frame = cv2.resize(frame, (224, 224))
 
-        # Convert the resized frame to RGB for processing with MediaPipe
-        frame_rgb = cv2.cvtColor(resized_frame, cv2.COLOR_BGR2RGB)
-
         # Process the resized frame with MediaPipe
-        results = pose.process(frame_rgb)
+        results = pose.process(resized_frame)
 
         if results.pose_landmarks:
             # Draw pose landmarks on the resized frame
