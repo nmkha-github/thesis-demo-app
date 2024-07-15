@@ -8,11 +8,13 @@ import VisualizationTab from "../VisualizationTab/VisualizationTab";
 interface TrackingSectionProps {
   file?: File;
   videoRef: React.RefObject<ReactPlayer>;
+  poseVideoRef: React.RefObject<ReactPlayer>;
 }
 
 const TrackingSection = ({
   file,
   videoRef,
+  poseVideoRef,
   ...boxProps
 }: TrackingSectionProps & BoxProps) => {
   const [tabIndex, setTabIndex] = useState(0);
@@ -39,6 +41,7 @@ const TrackingSection = ({
       <DangerTrackingTab
         file={file}
         videoRef={videoRef}
+        poseVideoRef={poseVideoRef}
         style={{ display: tabIndex === 1 ? "block" : "none" }}
       />
 

@@ -7,11 +7,13 @@ import { useDanger } from "../../provider/DangerProvider";
 interface DangerTrackingTabProps {
   file?: File;
   videoRef: React.RefObject<ReactPlayer>;
+  poseVideoRef: React.RefObject<ReactPlayer>;
 }
 
 export const DangerTrackingTab = ({
   file,
   videoRef,
+  poseVideoRef,
   ...boxProps
 }: DangerTrackingTabProps & BoxProps) => {
   const {
@@ -71,6 +73,9 @@ export const DangerTrackingTab = ({
                 onClick={() => {
                   if (videoRef.current) {
                     videoRef.current.seekTo(segment.start, "seconds");
+                  }
+                  if (poseVideoRef.current) {
+                    poseVideoRef.current.seekTo(segment.start, "seconds");
                   }
                 }}
               >{`start: ${segment.start} seconds - end: ${segment.end} seconds`}</Box>

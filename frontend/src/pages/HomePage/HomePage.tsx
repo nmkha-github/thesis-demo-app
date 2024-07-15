@@ -9,6 +9,7 @@ import VideoSection from "./components/VideoSection/VideoSection";
 const HomePage = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<ReactPlayer>(null);
+  const poseVideoRef = useRef<ReactPlayer>(null);
   const [file, setFile] = useState<File>();
   const [trackingOpen, setTrackingOpen] = useState(false);
   const { showSnackbarError } = useAppSnackbar();
@@ -62,6 +63,7 @@ const HomePage = () => {
         <VideoSection
           file={file}
           videoRef={videoRef}
+          poseVideoRef={poseVideoRef}
           onUpload={() => inputRef.current?.click()}
           onRemoveFile={() => setFile(undefined)}
         />
@@ -77,7 +79,11 @@ const HomePage = () => {
         )}
 
         <Collapse in={trackingOpen} timeout={"auto"} orientation="horizontal">
-          <TrackingSection videoRef={videoRef} file={file} />
+          <TrackingSection
+            videoRef={videoRef}
+            poseVideoRef={poseVideoRef}
+            file={file}
+          />
         </Collapse>
       </Box>
     </Box>

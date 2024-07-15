@@ -4,7 +4,7 @@ import { FaTrash } from "react-icons/fa";
 import Colors from "../../../../lib/constants/colors";
 import { MdFileUpload, MdOndemandVideo } from "react-icons/md";
 import { VscServerProcess } from "react-icons/vsc";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { Theme } from "@mui/joy";
 import VideoApi from "../../../../lib/apis/VideoApi";
@@ -13,6 +13,7 @@ import useAppSnackbar from "../../../../lib/hook/useAppSnackbar";
 interface VideoSectionProps {
   file?: File;
   videoRef?: React.LegacyRef<ReactPlayer>;
+  poseVideoRef?: React.LegacyRef<ReactPlayer>;
   onUpload?: () => void;
   onRemoveFile?: () => void;
 }
@@ -20,6 +21,7 @@ interface VideoSectionProps {
 const VideoSection = ({
   file,
   videoRef,
+  poseVideoRef,
   onUpload,
   onRemoveFile,
 }: VideoSectionProps) => {
@@ -45,7 +47,13 @@ const VideoSection = ({
 
   const PoseVideo = useMemo(
     () => (
-      <ReactPlayer url={poseVideoUrl} width={"100%"} height={340} controls />
+      <ReactPlayer
+        ref={poseVideoRef}
+        url={poseVideoUrl}
+        width={"100%"}
+        height={340}
+        controls
+      />
     ),
     [poseVideoUrl]
   );
@@ -87,9 +95,9 @@ const VideoSection = ({
         </Box>
       )}
 
-      {!loadingPose && (
-        <Box sx={{ display: poseMode ? "block" : "none" }}>{PoseVideo}</Box>
-      )}
+      <Box sx={{ display: !loadingPose && poseMode ? "block" : "none" }}>
+        {PoseVideo}
+      </Box>
 
       {!file && (
         <Box
