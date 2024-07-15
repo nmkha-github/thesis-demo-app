@@ -14,11 +14,11 @@ interface DangerContextProps {
 const DangerContext = createContext<DangerContextProps>({
   //init value
   dangerSegment: {
-    danger_segment: [],
+    danger_segment: [{ start: 2, end: 3 }],
   },
   threshold: 85,
-  setThreshold: () => {},
-  getDangerSegment: async () => {},
+  setThreshold: () => { },
+  getDangerSegment: async () => { },
   dangerSegmentLoading: false,
 });
 
@@ -29,7 +29,7 @@ interface DangerContextProviderProps {
 const DangerProvider = ({ children }: DangerContextProviderProps) => {
   //state
   const [dangerSegment, setDangerSegment] = useState<DangerPredictInterface>({
-    danger_segment: [],
+    danger_segment: [{ start: 2, end: 3 }],
   });
   const [threshold, setThreshold] = useState(85);
   const [dangerSegmentLoading, setDangerSegmentLoading] = useState(false);
