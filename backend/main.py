@@ -203,7 +203,7 @@ def pose():
         )
 
         for frame in pose_frames:
-            out.write((frame * 255).astype(np.uint8))
+            out.write(frame)
 
         out.release()
 
@@ -230,6 +230,7 @@ if __name__ == "__main__":
         "running",
         "smile",
         "crying",
+        "climb staircase",
     ]
     actions = danger_actions + safe_actions
 

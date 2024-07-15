@@ -1,11 +1,5 @@
-import { Box, Collapse, IconButton } from "@mui/material";
-import Switch, { switchClasses } from "@mui/joy/Switch";
-import { Theme } from "@mui/joy";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { MdFileUpload } from "react-icons/md";
-import { FaTrash } from "react-icons/fa";
-import { VscServerProcess } from "react-icons/vsc";
-import { MdOndemandVideo } from "react-icons/md";
+import { Box, Collapse } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
 import Colors from "../../lib/constants/colors";
 import useAppSnackbar from "../../lib/hook/useAppSnackbar";
 import TrackingSection from "./components/TrackingSection/TrackingSection";
