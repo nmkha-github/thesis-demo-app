@@ -60,12 +60,12 @@ const HomePage = () => {
           display: "flex",
         }}
       >
-        <Box style={{ width: 480 }}>
+        <Box style={{ width: 600 }}>
           <ReactPlayer
             ref={videoRef}
             url={!!file ? URL.createObjectURL(file) : ""}
             width={"100%"}
-            height={340}
+            height={500}
             style={{ display: !!file ? "block" : "none" }}
             controls
           />
