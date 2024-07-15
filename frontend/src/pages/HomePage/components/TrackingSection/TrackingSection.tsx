@@ -20,7 +20,7 @@ const TrackingSection = ({
   const [tabIndex, setTabIndex] = useState(0);
 
   return (
-    <Box style={{ width: 520 }} {...boxProps}>
+    <Box style={{ width: 540 }} {...boxProps}>
       <Tabs
         value={tabIndex}
         onChange={(event, newValue) => {
@@ -28,9 +28,9 @@ const TrackingSection = ({
         }}
         variant="fullWidth"
       >
-        <Tab value={0} label="Action" />
-        <Tab value={1} label="Danger" />
-        <Tab value={2} label="Visualization" />
+        <Tab value={0} label="Zeroshot" />
+        <Tab value={1} label="Danger Tracking" />
+        <Tab value={2} label="Attention Map" />
       </Tabs>
 
       <ActionTrackingTab

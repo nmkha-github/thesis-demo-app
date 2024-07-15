@@ -4,16 +4,18 @@ import { FaTrash } from "react-icons/fa";
 import Colors from "../../../../lib/constants/colors";
 import { MdFileUpload, MdOndemandVideo } from "react-icons/md";
 import { VscServerProcess } from "react-icons/vsc";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ReactPlayer from "react-player";
 import { Theme } from "@mui/joy";
 import VideoApi from "../../../../lib/apis/VideoApi";
 import useAppSnackbar from "../../../../lib/hook/useAppSnackbar";
+import { useAction } from "../../provider/ActionProvider";
+import { useDanger } from "../../provider/DangerProvider";
 
 interface VideoSectionProps {
   file?: File;
-  videoRef?: React.LegacyRef<ReactPlayer>;
-  poseVideoRef?: React.LegacyRef<ReactPlayer>;
+  videoRef: React.LegacyRef<ReactPlayer>;
+  poseVideoRef: React.LegacyRef<ReactPlayer>;
   onUpload?: () => void;
   onRemoveFile?: () => void;
 }
@@ -27,9 +29,12 @@ const VideoSection = ({
 }: VideoSectionProps) => {
   const [poseMode, setPoseMode] = useState(false);
   const [poseVideoUrl, setPoseVideoUrl] = useState("");
+  const [currentTime, setCurrentTime] = useState(0);
   const [loadingPose, setLoadingPose] = useState(false);
 
   const { showSnackbarError } = useAppSnackbar();
+  const { action } = useAction();
+  const { dangerSegment } = useDanger();
 
   const RawVideo = useMemo(
     () => (
@@ -53,6 +58,7 @@ const VideoSection = ({
         width={"100%"}
         height={340}
         controls
+        onProgress={(state) => setCurrentTime(state["playedSeconds"])}
       />
     ),
     [poseVideoUrl]
@@ -95,7 +101,28 @@ const VideoSection = ({
         </Box>
       )}
 
-      <Box sx={{ display: !loadingPose && poseMode ? "block" : "none" }}>
+      <Box
+        sx={{
+          display: !loadingPose && poseMode ? "block" : "none",
+          position: "relative",
+        }}
+      >
+        <Box
+          sx={{
+            right: 16,
+            position: "absolute",
+            color: dangerSegment["danger_segment"].some(
+              (segment) =>
+                segment.start <= currentTime && currentTime <= segment.end
+            )
+              ? "red"
+              : "green",
+            fontWeight: 600,
+            fontSize: 20,
+          }}
+        >
+          {action["predict"]}
+        </Box>
         {PoseVideo}
       </Box>
 
