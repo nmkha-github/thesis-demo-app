@@ -1,3 +1,4 @@
+from utils.pose import extract_pose
 from utils.visualization import Visualization
 from utils.danger_classification import DangerClassification
 from utils.video_utils import _frame_from_video, generate_frames
@@ -163,6 +164,50 @@ def visualize():
 
         return send_file("outputs/visualize_output.webm", mimetype="video/webm")
 
+@app.route("/pose", methods=["POST"])
+def pose():
+    # Check if the post request has the file part
+    if "file" not in request.files:
+        return jsonify({"error": "No file part"}), 400
+
+    file = request.files["file"]
+
+    # If the user does not select a file, the browser may submit an empty part without a filename
+    if file.filename == "":
+        return jsonify({"error": "No selected file"}), 400
+
+    if file:
+        # Check if the file is a video file (basic check using filename extension)
+        if not file.filename.lower().endswith((".mp4", ".avi", ".mov", ".mkv")):
+            return jsonify({"error": "File is not a video"}), 400
+
+        # Create a temporary file and write the uploaded video data to it
+        with tempfile.NamedTemporaryFile(delete=False) as temp_video:
+            temp_video.write(file.read())
+            temp_video_path = temp_video.name
+
+        # Decode the byte array to an OpenCV video capture object
+        video = cv2.VideoCapture(temp_video_path)
+        fps = video.get(cv2.CAP_PROP_FPS)
+        if not video.isOpened():
+            return jsonify({"error": "Could not open video file"}), 500
+
+        pose_frames = extract_pose(video)
+        
+        frame_height, frame_width, _ = pose_frames[0].shape
+        out = cv2.VideoWriter(
+            "outputs/pose_output.webm",
+            cv2.VideoWriter_fourcc(*"VP90"),
+            fps,
+            (frame_width, frame_height),
+        )
+
+        for frame in pose_frames:
+            out.write(frame)
+
+        out.release()
+
+        return send_file("outputs/pose_output.webm", mimetype="video/webm")
 
 if __name__ == "__main__":
     danger_actions = [
@@ -185,6 +230,7 @@ if __name__ == "__main__":
         "running",
         "smile",
         "crying",
+        "climb staircase",
     ]
     actions = danger_actions + safe_actions
 

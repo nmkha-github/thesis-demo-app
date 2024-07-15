@@ -1,18 +1,16 @@
-import { Box, Collapse, IconButton } from "@mui/material";
+import { Box, Collapse } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import { MdFileUpload } from "react-icons/md";
-import { FaTrash } from "react-icons/fa";
 import Colors from "../../lib/constants/colors";
 import useAppSnackbar from "../../lib/hook/useAppSnackbar";
 import TrackingSection from "./components/TrackingSection/TrackingSection";
 import ReactPlayer from "react-player";
+import VideoSection from "./components/VideoSection/VideoSection";
 
 const HomePage = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<ReactPlayer>(null);
   const [file, setFile] = useState<File>();
   const [trackingOpen, setTrackingOpen] = useState(false);
-
   const { showSnackbarError } = useAppSnackbar();
 
   const uploadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,6 +51,7 @@ const HomePage = () => {
           event.currentTarget.value = "";
         }}
       />
+
       <Box
         style={{
           boxShadow: "rgba(99, 99, 99, 0.4) 0px 2px 8px 0px",
@@ -60,6 +59,7 @@ const HomePage = () => {
           display: "flex",
         }}
       >
+<<<<<<< HEAD
         <Box style={{ width: 600 }}>
           <ReactPlayer
             ref={videoRef}
@@ -86,28 +86,15 @@ const HomePage = () => {
               <p>Upload File</p>
             </Box>
           )}
+=======
+        <VideoSection
+          file={file}
+          videoRef={videoRef}
+          onUpload={() => inputRef.current?.click()}
+          onRemoveFile={() => setFile(undefined)}
+        />
+>>>>>>> 67c70f0d67fffe6ec2d6ce8112a226b3c6789f81
 
-          <Box
-            style={{
-              padding: "8px 16px",
-              background: Colors.primary1,
-              marginTop: 28,
-              marginBottom: 20,
-              borderRadius: 16,
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Box>{file?.name}</Box>
-            <IconButton
-              onClick={() => setFile(undefined)}
-              style={{ width: 40, height: 40 }}
-            >
-              <FaTrash color="black" />
-            </IconButton>
-          </Box>
-        </Box>
         {trackingOpen && (
           <Box
             style={{
