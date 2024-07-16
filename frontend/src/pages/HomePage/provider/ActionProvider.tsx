@@ -12,10 +12,10 @@ interface ActionContextProps {
 const ActionContext = createContext<ActionContextProps>({
   //init value
   action: {
-    predict: "temp",
-    probabilities: { thu: 3, test: 1, tam: 2 },
+    predict: "",
+    probabilities: {},
   },
-  getAction: async () => { },
+  getAction: async () => {},
   actionLoading: false,
 });
 
@@ -26,8 +26,8 @@ interface ActionContextProviderProps {
 const ActionProvider = ({ children }: ActionContextProviderProps) => {
   //state
   const [action, setAction] = useState<ActionPredictInterface>({
-    predict: "temp",
-    probabilities: { thu: 3, test: 1, tam: 2 },
+    predict: "",
+    probabilities: {},
   });
   const [actionLoading, setActionLoading] = useState(false);
 

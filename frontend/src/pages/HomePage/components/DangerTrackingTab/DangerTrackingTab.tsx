@@ -8,6 +8,7 @@ import { useDanger } from "../../provider/DangerProvider";
 interface DangerTrackingTabProps {
   file?: File;
   videoRef: React.RefObject<ReactPlayer>;
+  poseVideoRef: React.RefObject<ReactPlayer>;
 }
 
 const CustomSlider = styled(Slider)({
@@ -27,6 +28,7 @@ const CustomSlider = styled(Slider)({
 export const DangerTrackingTab = ({
   file,
   videoRef,
+  poseVideoRef,
   ...boxProps
 }: DangerTrackingTabProps & BoxProps) => {
   const {
@@ -36,24 +38,6 @@ export const DangerTrackingTab = ({
     setThreshold,
     getDangerSegment,
   } = useDanger();
-
-  useEffect(() => {
-    if (file) {
-      getDangerSegment(file, threshold);
-    }
-  }, [file]);
-
-  useEffect(() => {
-    dangerSegment["danger_segment"].map((segment, index) => {
-      if (videoRef.current) {
-        const currentTime = videoRef.current.getCurrentTime();
-        console.log(currentTime);
-        if (segment.start < currentTime && currentTime < segment.end) {
-          console.log("nguy hiểm");
-        }
-      }
-    });
-  });
 
   const getColor = (value: number) => {
     if (value < 30) {
@@ -66,6 +50,12 @@ export const DangerTrackingTab = ({
       return '#eb4f4f';
     }
   };
+
+  useEffect(() => {
+    if (file) {
+      getDangerSegment(file, threshold);
+    }
+  }, [file]);
 
   return (
     <Box style={{ ...boxProps.style }}>
@@ -114,6 +104,9 @@ export const DangerTrackingTab = ({
                   if (videoRef.current) {
                     videoRef.current.seekTo(segment.start, "seconds");
                   }
+                  if (poseVideoRef.current) {
+                    poseVideoRef.current.seekTo(segment.start, "seconds");
+                  }
                 }}
               >{`start: ${segment.start} seconds - end: ${segment.end} seconds`}</Box>
             ))}
@@ -129,6 +122,7 @@ export const DangerTrackingTab = ({
         }}
       >
         <Button
+          style={{ marginTop: 25 }}
           variant="outlined"
           onClick={async () => {
             if (file) {
@@ -139,6 +133,6 @@ export const DangerTrackingTab = ({
           Pretracking
         </Button>
       </Box>
-    </Box>
+    </Box >
   );
 };

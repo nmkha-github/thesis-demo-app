@@ -9,6 +9,7 @@ import VideoSection from "./components/VideoSection/VideoSection";
 const HomePage = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<ReactPlayer>(null);
+  const poseVideoRef = useRef<ReactPlayer>(null);
   const [file, setFile] = useState<File>();
   const [trackingOpen, setTrackingOpen] = useState(false);
   const { showSnackbarError } = useAppSnackbar();
@@ -59,41 +60,13 @@ const HomePage = () => {
           display: "flex",
         }}
       >
-<<<<<<< HEAD
-        <Box style={{ width: 600 }}>
-          <ReactPlayer
-            ref={videoRef}
-            url={!!file ? URL.createObjectURL(file) : ""}
-            width={"100%"}
-            height={500}
-            style={{ display: !!file ? "block" : "none" }}
-            controls
-          />
-          {!file && (
-            <Box
-              style={{
-                height: 340,
-                border: `1.5px dashed ${Colors.primary}`,
-                borderRadius: 16,
-                cursor: "pointer",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              onClick={() => inputRef.current?.click()}
-            >
-              <MdFileUpload style={{ marginRight: 8 }} />
-              <p>Upload File</p>
-            </Box>
-          )}
-=======
         <VideoSection
           file={file}
           videoRef={videoRef}
+          poseVideoRef={poseVideoRef}
           onUpload={() => inputRef.current?.click()}
           onRemoveFile={() => setFile(undefined)}
         />
->>>>>>> 67c70f0d67fffe6ec2d6ce8112a226b3c6789f81
 
         {trackingOpen && (
           <Box
@@ -106,7 +79,11 @@ const HomePage = () => {
         )}
 
         <Collapse in={trackingOpen} timeout={"auto"} orientation="horizontal">
-          <TrackingSection videoRef={videoRef} file={file} />
+          <TrackingSection
+            videoRef={videoRef}
+            poseVideoRef={poseVideoRef}
+            file={file}
+          />
         </Collapse>
       </Box>
     </Box>
