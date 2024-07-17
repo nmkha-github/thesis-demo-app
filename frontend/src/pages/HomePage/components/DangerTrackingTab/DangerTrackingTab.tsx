@@ -122,14 +122,13 @@ export const DangerTrackingTab = ({
         }}
       >
         <Button
-          style={{ marginTop: 25 }}
           variant="outlined"
           onClick={async () => {
             if (file) {
               await getDangerSegment(file, threshold);
             }
           }}
-          style={{ marginTop: 45 }}
+          style={{ marginTop: 40 }}
         >
           Pretracking
         </Button>
