@@ -7,11 +7,14 @@ import AppRoutes from "./AppRoutes";
 import ConfirmDialogProvider from "./lib/provider/ConfirmDialogProvider";
 import "react-perfect-scrollbar/dist/css/styles.css";
 
+import { JoyrideStartProvider } from "./JoyrideSteps"
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
+    <JoyrideStartProvider />
     <AppSnackbarProvider>
       <BrowserRouter>
         <ConfirmDialogProvider>

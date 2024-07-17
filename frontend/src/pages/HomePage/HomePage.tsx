@@ -6,6 +6,8 @@ import TrackingSection from "./components/TrackingSection/TrackingSection";
 import ReactPlayer from "react-player";
 import VideoSection from "./components/VideoSection/VideoSection";
 
+import { JoyrideTrackingProvider } from "../../JoyrideSteps"
+
 const HomePage = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<ReactPlayer>(null);
@@ -84,6 +86,7 @@ const HomePage = () => {
             poseVideoRef={poseVideoRef}
             file={file}
           />
+          {trackingOpen && (<JoyrideTrackingProvider />)}
         </Collapse>
       </Box>
     </Box>

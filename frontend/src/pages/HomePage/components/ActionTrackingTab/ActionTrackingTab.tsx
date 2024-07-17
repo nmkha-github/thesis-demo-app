@@ -34,15 +34,17 @@ const ActionTrackingTab = ({
           <Box
             style={{ fontWeight: 600 }}
           >{`Action predict: ${action.predict}`}</Box>
-          {Object.keys(action.probabilities).map((key, i) => (
-            <Box
-              key={`action-${i}`}
-              style={{ display: "flex", justifyContent: "space-between" }}
-            >
-              <Box>{key}:</Box>
-              <Box>{`${(action.probabilities[key] * 100).toFixed(2)}%`}</Box>
-            </Box>
-          ))}
+          {Object.entries(action.probabilities)
+            .sort(([, a], [, b]) => b - a)
+            .map(([key, value], i) => (
+              <Box
+                key={`action-${i}`}
+                style={{ display: "flex", justifyContent: "space-between" }}
+              >
+                <Box>{key}:</Box>
+                <Box>{`${(value * 100).toFixed(2)}%`}</Box>
+              </Box>
+            ))}
         </Box>
       )}
     </Box>
