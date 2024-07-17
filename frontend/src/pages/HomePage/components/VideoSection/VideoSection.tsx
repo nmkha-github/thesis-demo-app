@@ -4,7 +4,7 @@ import { FaTrash } from "react-icons/fa";
 import Colors from "../../../../lib/constants/colors";
 import { MdFileUpload, MdOndemandVideo } from "react-icons/md";
 import { VscServerProcess } from "react-icons/vsc";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { Theme } from "@mui/joy";
 import VideoApi from "../../../../lib/apis/VideoApi";
