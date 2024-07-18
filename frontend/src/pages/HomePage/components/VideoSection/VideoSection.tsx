@@ -85,7 +85,7 @@ const VideoSection = ({
   }, [file]);
 
   return (
-    <Box style={{ width: 560 }}>z
+    <Box style={{ width: 560 }}>
       <Box sx={{ display: !poseMode ? "block" : "none" }}>{RawVideo}</Box>
 
       {loadingPose && poseMode && (

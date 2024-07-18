@@ -87,9 +87,6 @@ const HomePage = () => {
           },
         }}
       />
-      <button onClick={handleClickHelp}>
-        Start
-      </button>
 
       <input
         type="file"
@@ -108,13 +105,18 @@ const HomePage = () => {
           display: "flex",
         }}
       >
-        <VideoSection
-          file={file}
-          videoRef={videoRef}
-          poseVideoRef={poseVideoRef}
-          onUpload={() => inputRef.current?.click()}
-          onRemoveFile={() => setFile(undefined)}
-        />
+        <div>
+          <button onClick={handleClickHelp} style={{ marginBottom: 10 }}>
+            Help
+          </button>
+          <VideoSection
+            file={file}
+            videoRef={videoRef}
+            poseVideoRef={poseVideoRef}
+            onUpload={() => inputRef.current?.click()}
+            onRemoveFile={() => setFile(undefined)}
+          />
+        </div>
 
         {trackingOpen && (
           <Box
