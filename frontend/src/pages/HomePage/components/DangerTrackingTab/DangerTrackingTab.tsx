@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Box, BoxProps, Button, CircularProgress, Slider } from "@mui/material";
+import { styled } from '@mui/material/styles';
 import ReactPlayer from "react-player";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { useDanger } from "../../provider/DangerProvider";
@@ -9,6 +10,20 @@ interface DangerTrackingTabProps {
   videoRef: React.RefObject<ReactPlayer>;
   poseVideoRef: React.RefObject<ReactPlayer>;
 }
+
+const CustomSlider = styled(Slider)({
+  '& .MuiSlider-thumb': {
+    display: 'none',
+  },
+  '& .MuiSlider-track': {
+    height: '8px',
+    borderRadius: '4px',
+  },
+  '& .MuiSlider-rail': {
+    height: '8px',
+    borderRadius: '4px',
+  },
+});
 
 export const DangerTrackingTab = ({
   file,
@@ -23,6 +38,18 @@ export const DangerTrackingTab = ({
     setThreshold,
     getDangerSegment,
   } = useDanger();
+
+  const getColor = (value: number) => {
+    if (value < 30) {
+      return '#76f480';
+    }
+    else if (value < 70) {
+      return '#ffbe73';
+    }
+    else {
+      return '#eb4f4f';
+    }
+  };
 
   useEffect(() => {
     if (file) {
@@ -40,10 +67,13 @@ export const DangerTrackingTab = ({
         }}
       >
         <Box style={{ fontWeight: 600 }}>Threshold: </Box>
-        <Slider
+        <CustomSlider
           value={threshold}
           onChange={(event, newValue) => setThreshold(newValue as number)}
           style={{ margin: "0px 8px" }}
+          sx={{
+            color: getColor(threshold),
+          }}
         />
         <Box>{threshold}</Box>
       </Box>
@@ -98,10 +128,11 @@ export const DangerTrackingTab = ({
               await getDangerSegment(file, threshold);
             }
           }}
+          style={{ marginTop: 50 }}
         >
           Pretracking
         </Button>
       </Box>
-    </Box>
+    </Box >
   );
 };

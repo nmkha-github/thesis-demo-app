@@ -4,7 +4,7 @@ import { FaTrash } from "react-icons/fa";
 import Colors from "../../../../lib/constants/colors";
 import { MdFileUpload, MdOndemandVideo } from "react-icons/md";
 import { VscServerProcess } from "react-icons/vsc";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { Theme } from "@mui/joy";
 import VideoApi from "../../../../lib/apis/VideoApi";
@@ -127,21 +127,24 @@ const VideoSection = ({
       </Box>
 
       {!file && (
-        <Box
-          style={{
-            height: 340,
-            border: `1.5px dashed ${Colors.primary}`,
-            borderRadius: 16,
-            cursor: "pointer",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          onClick={onUpload}
-        >
-          <MdFileUpload style={{ marginRight: 8 }} />
-          <p>Upload File</p>
-        </Box>
+
+        <div id="uploadVideo">
+          <Box
+            style={{
+              height: 340,
+              border: `1.5px dashed ${Colors.primary}`,
+              borderRadius: 16,
+              cursor: "pointer",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onClick={onUpload}
+          >
+            <MdFileUpload style={{ marginRight: 8 }} />
+            <p>Upload File</p>
+          </Box>
+        </div>
       )}
 
       <Box
@@ -151,70 +154,75 @@ const VideoSection = ({
           justifyContent: "center",
         }}
       >
-        <Switch
-          disabled={!file}
-          checked={poseMode}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            setPoseMode(event.target.checked)
-          }
-          slotProps={{
-            thumb: {
-              children: poseMode ? (
-                <VscServerProcess size={22} />
-              ) : (
-                <MdOndemandVideo size={22} />
-              ),
-            },
-          }}
-          sx={(theme: Theme) => ({
-            "--Switch-thumbShadow": "0 3px 7px 0 rgba(0 0 0 / 0.12)",
-            "--Switch-thumbSize": "28px",
-            "--Switch-trackWidth": "60px",
-            "--Switch-trackHeight": "32px",
-            "--Switch-trackBackground": theme.vars.palette.background.level3,
-            [`& .${switchClasses.thumb}`]: {
-              transition: "width 0.2s, left 0.2s",
-            },
-            "&:hover": {
-              "--Switch-trackBackground": theme.vars.palette.background.level3,
-            },
-            "&:active": {
-              "--Switch-thumbWidth": "32px",
-            },
-            [`&.${switchClasses.checked}`]: {
-              "--Switch-trackBackground": Colors.primary,
-              "&:hover": {
-                "--Switch-trackBackground": Colors.primary,
+
+        <div id="boneVisual">
+          <Switch
+            disabled={!file}
+            checked={poseMode}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+              setPoseMode(event.target.checked)
+            }
+            slotProps={{
+              thumb: {
+                children: poseMode ? (
+                  <VscServerProcess size={22} />
+                ) : (
+                  <MdOndemandVideo size={22} />
+                ),
               },
-            },
-          })}
-        />
+            }}
+            sx={(theme: Theme) => ({
+              "--Switch-thumbShadow": "0 3px 7px 0 rgba(0 0 0 / 0.12)",
+              "--Switch-thumbSize": "28px",
+              "--Switch-trackWidth": "60px",
+              "--Switch-trackHeight": "32px",
+              "--Switch-trackBackground": theme.vars.palette.background.level3,
+              [`& .${switchClasses.thumb}`]: {
+                transition: "width 0.2s, left 0.2s",
+              },
+              "&:hover": {
+                "--Switch-trackBackground": theme.vars.palette.background.level3,
+              },
+              "&:active": {
+                "--Switch-thumbWidth": "32px",
+              },
+              [`&.${switchClasses.checked}`]: {
+                "--Switch-trackBackground": Colors.primary,
+                "&:hover": {
+                  "--Switch-trackBackground": Colors.primary,
+                },
+              },
+            })}
+          />
+        </div>
       </Box>
 
-      <Box
-        style={{
-          padding: "8px 16px",
-          background: Colors.primary1,
-          marginTop: 20,
-          marginBottom: 20,
-          borderRadius: 16,
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Box>{file?.name}</Box>
-        <IconButton
-          onClick={() => {
-            onRemoveFile?.();
-            setPoseMode(false);
+      <div id="removeVideo">
+        <Box
+          style={{
+            padding: "8px 16px",
+            background: Colors.primary1,
+            marginTop: 20,
+            marginBottom: 20,
+            borderRadius: 16,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
-          style={{ width: 40, height: 40 }}
         >
-          <FaTrash color="black" />
-        </IconButton>
-      </Box>
-    </Box>
+          <Box>{file?.name}</Box>
+          <IconButton
+            onClick={() => {
+              onRemoveFile?.();
+              setPoseMode(false);
+            }}
+            style={{ width: 40, height: 40 }}
+          >
+            <FaTrash color="black" />
+          </IconButton>
+        </Box>
+      </div>
+    </Box >
   );
 };
 

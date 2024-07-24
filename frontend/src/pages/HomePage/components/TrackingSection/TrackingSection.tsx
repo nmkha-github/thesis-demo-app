@@ -28,9 +28,9 @@ const TrackingSection = ({
         }}
         variant="fullWidth"
       >
-        <Tab value={0} label="Zeroshot" />
-        <Tab value={1} label="Danger Tracking" />
-        <Tab value={2} label="Attention Map" />
+        <Tab value={0} label="Zeroshot" id="zeroShot" />
+        <Tab value={1} label="Danger Tracking" id="dangerTracking" />
+        <Tab value={2} label="Attention Map" id="attentionMap" />
       </Tabs>
 
       <ActionTrackingTab

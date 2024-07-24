@@ -6,6 +6,14 @@ import TrackingSection from "./components/TrackingSection/TrackingSection";
 import ReactPlayer from "react-player";
 import VideoSection from "./components/VideoSection/VideoSection";
 
+import { stepsStart } from "../../JoyrideSteps"
+import Joyride, { CallBackProps, STATUS, Step } from 'react-joyride';
+
+interface HelpState {
+  run: boolean;
+  steps: Step[];
+}
+
 const HomePage = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<ReactPlayer>(null);
@@ -31,7 +39,29 @@ const HomePage = () => {
     if (file) {
       setTrackingOpen(true);
     }
+    console.log(run);
   }, [file]);
+
+  // Joyride
+  const [{ run, steps }, setState] = useState<HelpState>({
+    run: false,
+    steps: stepsStart
+  });
+
+  const handleClickHelp = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    setState({ run: true, steps });
+    console.log("buton", run, steps);
+  };
+
+  const handleJoyrideCallback = (data: CallBackProps) => {
+    const { status, type } = data;
+    const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
+
+    if (finishedStatuses.includes(status)) {
+      setState({ run: false, steps });
+    }
+  };
 
   return (
     <Box
@@ -43,6 +73,21 @@ const HomePage = () => {
         alignItems: "center",
       }}
     >
+      <Joyride
+        callback={handleJoyrideCallback}
+        continuous
+        run={run}
+        scrollToFirstStep
+        showProgress
+        showSkipButton
+        steps={steps}
+        styles={{
+          options: {
+            zIndex: 10000,
+          },
+        }}
+      />
+
       <input
         type="file"
         ref={inputRef}
@@ -60,13 +105,18 @@ const HomePage = () => {
           display: "flex",
         }}
       >
-        <VideoSection
-          file={file}
-          videoRef={videoRef}
-          poseVideoRef={poseVideoRef}
-          onUpload={() => inputRef.current?.click()}
-          onRemoveFile={() => setFile(undefined)}
-        />
+        <div>
+          <button onClick={handleClickHelp} style={{ marginBottom: 10 }}>
+            Help
+          </button>
+          <VideoSection
+            file={file}
+            videoRef={videoRef}
+            poseVideoRef={poseVideoRef}
+            onUpload={() => inputRef.current?.click()}
+            onRemoveFile={() => setFile(undefined)}
+          />
+        </div>
 
         {trackingOpen && (
           <Box
