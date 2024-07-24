@@ -5,6 +5,7 @@ import useAppSnackbar from "../../lib/hook/useAppSnackbar";
 import TrackingSection from "./components/TrackingSection/TrackingSection";
 import ReactPlayer from "react-player";
 import VideoSection from "./components/VideoSection/VideoSection";
+import JoyrideButton from "./components/JoyrideButton/JoyrideButton";
 
 const HomePage = () => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -43,6 +44,7 @@ const HomePage = () => {
         alignItems: "center",
       }}
     >
+      <JoyrideButton style={{ position: "absolute", right: 32, top: 32 }} />
       <input
         type="file"
         ref={inputRef}

@@ -44,6 +44,7 @@ const VideoSection = ({
         width={"100%"}
         height={340}
         style={{ display: !!file ? "block" : "none" }}
+        onProgress={(state) => setCurrentTime(state["playedSeconds"])}
         controls
       />
     ),
@@ -80,13 +81,33 @@ const VideoSection = ({
   useEffect(() => {
     if (file) {
       getPose(file);
-      setPoseMode(true);
+      // setPoseMode(true);
     }
   }, [file]);
 
   return (
     <Box style={{ width: 560 }}>
-      <Box sx={{ display: !poseMode ? "block" : "none" }}>{RawVideo}</Box>
+      <Box sx={{ display: !poseMode ? "block" : "none", position: "relative" }}>
+        {!!file && (
+          <Box
+            sx={{
+              right: 16,
+              position: "absolute",
+              color: dangerSegment["danger_segment"].some(
+                (segment) =>
+                  segment.start <= currentTime && currentTime <= segment.end
+              )
+                ? "red"
+                : "green",
+              fontWeight: 600,
+              fontSize: 20,
+            }}
+          >
+            {action["predict"]}
+          </Box>
+        )}
+        {RawVideo}
+      </Box>
 
       {loadingPose && poseMode && (
         <Box
@@ -128,6 +149,7 @@ const VideoSection = ({
 
       {!file && (
         <Box
+          id="uploadVideo"
           style={{
             height: 340,
             border: `1.5px dashed ${Colors.primary}`,
@@ -136,6 +158,7 @@ const VideoSection = ({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            backgroundColor: "white",
           }}
           onClick={onUpload}
         >
@@ -152,6 +175,7 @@ const VideoSection = ({
         }}
       >
         <Switch
+          id="boneVisual"
           disabled={!file}
           checked={poseMode}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
@@ -191,29 +215,31 @@ const VideoSection = ({
         />
       </Box>
 
-      <Box
-        style={{
-          padding: "8px 16px",
-          background: Colors.primary1,
-          marginTop: 20,
-          marginBottom: 20,
-          borderRadius: 16,
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Box>{file?.name}</Box>
-        <IconButton
-          onClick={() => {
-            onRemoveFile?.();
-            setPoseMode(false);
+      <div id="removeVideo">
+        <Box
+          style={{
+            padding: "8px 16px",
+            background: Colors.primary1,
+            marginTop: 20,
+            marginBottom: 20,
+            borderRadius: 16,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
-          style={{ width: 40, height: 40 }}
         >
-          <FaTrash color="black" />
-        </IconButton>
-      </Box>
+          <Box>{file?.name}</Box>
+          <IconButton
+            onClick={() => {
+              onRemoveFile?.();
+              setPoseMode(false);
+            }}
+            style={{ width: 40, height: 40 }}
+          >
+            <FaTrash color="black" />
+          </IconButton>
+        </Box>
+      </div>
     </Box>
   );
 };

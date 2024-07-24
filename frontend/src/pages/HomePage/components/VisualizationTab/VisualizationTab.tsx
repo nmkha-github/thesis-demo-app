@@ -47,7 +47,7 @@ const VisualizationTab = ({
           <CircularProgress />
         </Box>
       ) : (
-        <Box>
+        <Box style={{ marginTop: 32 }}>
           <ReactPlayer url={videoUrl} width={"100%"} height={340} controls />
         </Box>
       )}
